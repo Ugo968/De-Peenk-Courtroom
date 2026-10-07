@@ -78,12 +78,20 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
               ⚖️ View Active Cases
             </motion.button>
             <motion.button
+              onClick={() => setCurrentPage('wallet')}
+              className="px-8 py-4 rounded-3xl bg-gradient-to-r from-gold-400 to-gold-500 text-white font-semibold text-lg shadow-gold hover:shadow-xl transition-all"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              💰 Fund Wallet
+            </motion.button>
+            <motion.button
               onClick={() => setCurrentPage('identity')}
               className="px-8 py-4 rounded-3xl bg-white/80 backdrop-blur-sm border-2 border-pink-200 text-pink-600 font-semibold text-lg hover:bg-pink-50 transition-all"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              🎭 Try Identity Generator
+              🎭 Identity Generator
             </motion.button>
           </motion.div>
 

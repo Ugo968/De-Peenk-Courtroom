@@ -11,6 +11,7 @@ const navItems: { label: string; page: Page; emoji: string }[] = [
   { label: 'Home', page: 'home', emoji: '🏠' },
   { label: 'Cases', page: 'cases', emoji: '⚖️' },
   { label: 'Identity', page: 'identity', emoji: '🎭' },
+  { label: 'Wallet', page: 'wallet', emoji: '💰' },
   { label: 'Schema', page: 'schema', emoji: '🗄️' },
   { label: 'Dashboard', page: 'dashboard', emoji: '📊' },
 ];

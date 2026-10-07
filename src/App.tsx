@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HeroSection } from './components/HeroSection';
 import { Navbar } from './components/Navbar';
@@ -20,6 +20,7 @@ import { BrandDashboard } from './components/BrandDashboard';
 import { CJSlotSystem } from './components/CJSlotSystem';
 import { LawyerSlotSystem } from './components/LawyerSlotSystem';
 import { VideoAdRewards } from './components/VideoAdRewards';
+import { CourtroomIntro } from './components/CourtroomIntro';
 import { Footer } from './components/Footer';
 import { useWallet } from './hooks/useWallet';
 import { mockCases } from './lib/mock-data';
@@ -29,6 +30,25 @@ import type { CaseCategory } from './lib/mock-data';
 export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'lawyer-slots' | 'video-rewards' | 'cj-dashboard' | 'cj-chamber' | 'case-detail' | 'brand-dashboard' | 'cj-slots';
 
 export default function App() {
+  const [showIntro, setShowIntro] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
+
+  useEffect(() => {
+    // Check if user has seen intro before
+    const hasSeenIntro = localStorage.getItem('peeink_intro_complete');
+    
+    if (!hasSeenIntro) {
+      setShowIntro(true);
+    } else {
+      setIntroComplete(true);
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    localStorage.setItem('peeink_intro_complete', 'true');
+    setIntroComplete(true);
+    setShowIntro(false);
+  };
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [selectedChamberCaseId, setSelectedChamberCaseId] = useState<string | null>(null);
   const [selectedCaseId, setSelectedCaseId] = useState<string>('1'); // Default to first case for demo
@@ -70,6 +90,16 @@ export default function App() {
 
   return (
     <div className="min-h-screen font-sans">
+      {/* Courtroom Intro Experience */}
+      <AnimatePresence>
+        {showIntro && (
+          <CourtroomIntro onComplete={handleIntroComplete} />
+        )}
+      </AnimatePresence>
+
+      {/* Main App Content */}
+      {introComplete && (
+        <>
       <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
       
       {/* Wallet Quick View Bar */}
@@ -196,6 +226,8 @@ export default function App() {
       <VideoAdPopup />
 
       <Footer />
+        </>
+      )}
     </div>
   );
 }

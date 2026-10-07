@@ -17,13 +17,14 @@ import { TopBanner } from './components/TopBanner';
 import { SidebarAds } from './components/SidebarAds';
 import { VideoAdPopup } from './components/VideoAdPopup';
 import { BrandDashboard } from './components/BrandDashboard';
+import { CJSlotSystem } from './components/CJSlotSystem';
 import { Footer } from './components/Footer';
 import { useWallet } from './hooks/useWallet';
 import { mockCases } from './lib/mock-data';
 import type { PackageType } from './lib/economy';
 import type { CaseCategory } from './lib/mock-data';
 
-export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'cj-dashboard' | 'cj-chamber' | 'case-detail' | 'brand-dashboard';
+export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'cj-dashboard' | 'cj-chamber' | 'case-detail' | 'brand-dashboard' | 'cj-slots';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -160,6 +161,9 @@ export default function App() {
           )}
           {currentPage === 'brand-dashboard' && (
             <BrandDashboard />
+          )}
+          {currentPage === 'cj-slots' && (
+            <CJSlotSystem />
           )}
           </div>
 

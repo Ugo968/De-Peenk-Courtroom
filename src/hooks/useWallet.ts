@@ -38,7 +38,20 @@ export function useWallet() {
 
   const rewardLawyerWin = useCallback(() => {
     setWallet(prev => {
-      const newVirtualCredits = prev.virtualLawyerCredits + VIRTUAL_REWARDS.CREDITS_PER_WIN;
+      const newVirtualCredits = prev.virtualLawyerCredits + VIRTUAL_REWARDS.LAWYER_CREDITS_PER_WIN;
+      const newLevel = Math.floor(newVirtualCredits / VIRTUAL_REWARDS.LEVEL_THRESHOLD) + 1;
+      return {
+        ...prev,
+        virtualLawyerCredits: newVirtualCredits,
+        casesWon: prev.casesWon + VIRTUAL_REWARDS.CASES_WON_INCREMENT,
+        level: newLevel,
+      };
+    });
+  }, []);
+
+  const rewardCJResolve = useCallback(() => {
+    setWallet(prev => {
+      const newVirtualCredits = prev.virtualLawyerCredits + VIRTUAL_REWARDS.CJ_CREDITS_PER_RESOLVE;
       const newLevel = Math.floor(newVirtualCredits / VIRTUAL_REWARDS.LEVEL_THRESHOLD) + 1;
       return {
         ...prev,
@@ -54,5 +67,6 @@ export function useWallet() {
     addCredits,
     spendCredits,
     rewardLawyerWin,
+    rewardCJResolve,
   };
 }

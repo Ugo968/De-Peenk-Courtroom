@@ -76,10 +76,11 @@ export const COIN_COSTS = {
 };
 
 /**
- * Virtual Lawyer Reward Constants (Gamified, NOT real money)
+ * Virtual Lawyer/CJ Reward Constants (Gamified, NOT real money)
  */
 export const VIRTUAL_REWARDS = {
-  CREDITS_PER_WIN: 400,
+  LAWYER_CREDITS_PER_WIN: 4000,
+  CJ_CREDITS_PER_RESOLVE: 6000,
   CASES_WON_INCREMENT: 1,
   LEVEL_THRESHOLD: 1000, // credits per level
 };

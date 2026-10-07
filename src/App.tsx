@@ -21,6 +21,7 @@ import { CJSlotSystem } from './components/CJSlotSystem';
 import { LawyerSlotSystem } from './components/LawyerSlotSystem';
 import { VideoAdRewards } from './components/VideoAdRewards';
 import { CourtroomIntro } from './components/CourtroomIntro';
+import { TrialCountdown } from './components/TrialCountdown';
 import { Footer } from './components/Footer';
 import { useWallet } from './hooks/useWallet';
 import { mockCases } from './lib/mock-data';
@@ -53,6 +54,12 @@ export default function App() {
   const [selectedChamberCaseId, setSelectedChamberCaseId] = useState<string | null>(null);
   const [selectedCaseId, setSelectedCaseId] = useState<string>('1'); // Default to first case for demo
   const [userGender, setUserGender] = useState<'MALE' | 'FEMALE'>('FEMALE'); // Default to FEMALE for demo
+  const [trialEndsAt, setTrialEndsAt] = useState<string | null>(() => {
+    // For demo: set trial to end in 3 days from now
+    const trialEnd = new Date();
+    trialEnd.setDate(trialEnd.getDate() + 3);
+    return trialEnd.toISOString();
+  });
   const { wallet, addCredits, spendCredits, rewardLawyerWin } = useWallet();
 
   const handleCreditsAdded = (_packageType: PackageType, credits: number) => {
@@ -130,6 +137,19 @@ export default function App() {
 
       {/* Top Banner Ad */}
       <TopBanner />
+
+      {/* Trial Countdown - Floating Component */}
+      {trialEndsAt && (
+        <div className="fixed top-32 right-4 z-40 w-80">
+          <TrialCountdown 
+            trialEndsAt={trialEndsAt}
+            onExpire={() => {
+              setTrialEndsAt(null);
+              // In production, this would call API to downgrade user
+            }}
+          />
+        </div>
+      )}
 
       <AnimatePresence mode="wait">
         <motion.main

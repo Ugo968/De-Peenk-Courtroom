@@ -13,13 +13,17 @@ import { CJTriageDashboard } from './components/CJTriageDashboard';
 import { CJPrivateChamber } from './components/CJPrivateChamber';
 import { GalleryTalk } from './components/GalleryTalk';
 import { CaseDetailView } from './components/CaseDetailView';
+import { TopBanner } from './components/TopBanner';
+import { SidebarAds } from './components/SidebarAds';
+import { VideoAdPopup } from './components/VideoAdPopup';
+import { BrandDashboard } from './components/BrandDashboard';
 import { Footer } from './components/Footer';
 import { useWallet } from './hooks/useWallet';
 import { mockCases } from './lib/mock-data';
 import type { PackageType } from './lib/economy';
 import type { CaseCategory } from './lib/mock-data';
 
-export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'cj-dashboard' | 'cj-chamber' | 'case-detail';
+export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'cj-dashboard' | 'cj-chamber' | 'case-detail' | 'brand-dashboard';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -90,6 +94,9 @@ export default function App() {
         </div>
       </div>
 
+      {/* Top Banner Ad */}
+      <TopBanner />
+
       <AnimatePresence mode="wait">
         <motion.main
           key={currentPage}
@@ -97,7 +104,10 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
+          className="flex"
         >
+          {/* Main Content Area */}
+          <div className="flex-1 min-w-0">
           {currentPage === 'home' && <HeroSection setCurrentPage={setCurrentPage} />}
           {currentPage === 'cases' && (
             <CasesBoard 
@@ -148,8 +158,22 @@ export default function App() {
               userHandle="FL-DEMO89"
             />
           )}
+          {currentPage === 'brand-dashboard' && (
+            <BrandDashboard />
+          )}
+          </div>
+
+          {/* Sidebar Ads */}
+          <aside className="hidden lg:block w-80 flex-shrink-0 p-6">
+            <div className="sticky top-32">
+              <SidebarAds />
+            </div>
+          </aside>
         </motion.main>
       </AnimatePresence>
+
+      {/* Video Ad Popup */}
+      <VideoAdPopup />
 
       <Footer />
     </div>

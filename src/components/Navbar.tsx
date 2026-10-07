@@ -13,6 +13,7 @@ const navItems: { label: string; page: Page; emoji: string }[] = [
   { label: 'File Case', page: 'file-case', emoji: '🎀' },
   { label: 'Lawyer', page: 'lawyer-dashboard', emoji: '⚖️' },
   { label: 'Chief Judge', page: 'cj-dashboard', emoji: '👑' },
+  { label: 'Brands', page: 'brand-dashboard', emoji: '📢' },
   { label: 'Identity', page: 'identity', emoji: '🎭' },
   { label: 'Wallet', page: 'wallet', emoji: '💰' },
   { label: 'Schema', page: 'schema', emoji: '🗄️' },

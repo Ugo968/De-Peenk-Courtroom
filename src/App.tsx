@@ -52,6 +52,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [selectedChamberCaseId, setSelectedChamberCaseId] = useState<string | null>(null);
   const [selectedCaseId, setSelectedCaseId] = useState<string>('1'); // Default to first case for demo
+  const [userGender, setUserGender] = useState<'MALE' | 'FEMALE'>('FEMALE'); // Default to FEMALE for demo
   const { wallet, addCredits, spendCredits, rewardLawyerWin } = useWallet();
 
   const handleCreditsAdded = (_packageType: PackageType, credits: number) => {
@@ -154,12 +155,13 @@ export default function App() {
           {currentPage === 'schema' && <PrismaSchema />}
           {currentPage === 'dashboard' && <Dashboard />}
           {currentPage === 'wallet' && (
-            <WalletDashboard wallet={wallet} onCreditsAdded={handleCreditsAdded} />
+            <WalletDashboard wallet={wallet} onCreditsAdded={handleCreditsAdded} userGender={userGender} />
           )}
           {currentPage === 'file-case' && (
             <FileCaseForm 
               onSubmit={handleFileCase} 
-              currentCredits={wallet.balanceCredits} 
+              currentCredits={wallet.balanceCredits}
+              userGender={userGender}
             />
           )}
           {currentPage === 'lawyer-dashboard' && (
@@ -173,7 +175,7 @@ export default function App() {
           {currentPage === 'lawyer-slots' && (
             <LawyerSlotSystem 
               userRole={wallet.role}
-              userGender="FEMALE"
+              userGender={userGender}
               userReligion="CHRISTIAN"
             />
           )}
@@ -209,7 +211,7 @@ export default function App() {
             <BrandDashboard />
           )}
           {currentPage === 'cj-slots' && (
-            <CJSlotSystem />
+            <CJSlotSystem userGender={userGender} />
           )}
           </div>
 

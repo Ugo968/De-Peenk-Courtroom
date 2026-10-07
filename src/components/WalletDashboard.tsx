@@ -7,9 +7,10 @@ import type { PackageType } from '../lib/economy';
 interface WalletDashboardProps {
   wallet: WalletState;
   onCreditsAdded: (packageType: PackageType, credits: number) => void;
+  userGender?: 'MALE' | 'FEMALE';
 }
 
-export function WalletDashboard({ wallet, onCreditsAdded }: WalletDashboardProps) {
+export function WalletDashboard({ wallet, onCreditsAdded, userGender = 'FEMALE' }: WalletDashboardProps) {
   const [showModal, setShowModal] = useState(false);
 
   const progressToNextLevel = ((wallet.virtualLawyerCredits % 1000) / 1000) * 100;
@@ -212,6 +213,7 @@ export function WalletDashboard({ wallet, onCreditsAdded }: WalletDashboardProps
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         userEmail="user@example.com"
+        userGender={userGender}
         onSuccess={(packageType, credits) => {
           onCreditsAdded(packageType, credits);
         }}

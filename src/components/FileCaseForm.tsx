@@ -7,6 +7,7 @@ import type { CaseCategory } from '../lib/mock-data';
 interface FileCaseFormProps {
   onSubmit: (data: { title: string; description: string; category: CaseCategory }) => void;
   currentCredits: number;
+  userGender?: 'MALE' | 'FEMALE';
 }
 
 const FILING_COST = 200; // 200 coins to file a case
@@ -21,7 +22,7 @@ const categories: { value: CaseCategory; label: string; emoji: string }[] = [
   { value: 'OTHERS', label: 'Others', emoji: '✨' },
 ];
 
-export function FileCaseForm({ onSubmit, currentCredits }: FileCaseFormProps) {
+export function FileCaseForm({ onSubmit, currentCredits, userGender = 'FEMALE' }: FileCaseFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<CaseCategory | ''>('');
@@ -31,9 +32,16 @@ export function FileCaseForm({ onSubmit, currentCredits }: FileCaseFormProps) {
   const [showHireLawyerModal, setShowHireLawyerModal] = useState(false);
 
   const canAfford = currentCredits >= FILING_COST;
+  const isMale = userGender === 'MALE';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Gender validation - only females can file cases
+    if (isMale) {
+      alert('Only women can file cases on De Peenk Courtroom. This is a safe space for women to seek justice.');
+      return;
+    }
 
     if (!title || !description || !category) {
       alert('Please fill in all fields');
@@ -120,6 +128,30 @@ export function FileCaseForm({ onSubmit, currentCredits }: FileCaseFormProps) {
           Share your story. We're here to listen and help. 💖
         </p>
       </motion.div>
+
+      {/* Gender Restriction Notice */}
+      {isMale && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 bg-gradient-to-r from-sky-50 to-blue-50 border-2 border-sky-200 rounded-2xl p-6"
+        >
+          <div className="flex items-start gap-4">
+            <span className="text-4xl">🚫</span>
+            <div>
+              <h3 className="font-heading text-xl font-bold text-sky-700 mb-2">
+                Filing Restricted
+              </h3>
+              <p className="text-sky-600 mb-3">
+                Only women can file cases on De Peenk Courtroom. This is a safe space dedicated to women's justice.
+              </p>
+              <p className="text-sm text-sky-500">
+                Gentlemen are welcome to participate as listeners and witnesses. You can still buy coins to testify in cases. 💙
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Credits Warning */}
       {!canAfford && (

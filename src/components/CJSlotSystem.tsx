@@ -11,17 +11,30 @@ import {
 } from '../lib/cj-slots';
 import type { Religion, CJSlot } from '../lib/cj-slots';
 
-export function CJSlotSystem() {
+interface CJSlotSystemProps {
+  userGender?: 'MALE' | 'FEMALE';
+}
+
+export function CJSlotSystem({ userGender = 'FEMALE' }: CJSlotSystemProps) {
   const [selectedReligion, setSelectedReligion] = useState<Religion | null>(null);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [purchaseResult, setPurchaseResult] = useState<{
-    status: 'IMMEDIATE' | 'QUEUED';
+    status: 'IMMEDIATE' | 'QUEUED' | 'GENDER_RESTRICTED';
     queuePosition?: number;
     estimatedWaitDays?: number;
   } | null>(null);
 
   const handlePurchaseClick = (religion: Religion) => {
+    // Gender validation
+    if (userGender !== 'FEMALE') {
+      setPurchaseResult({
+        status: 'GENDER_RESTRICTED',
+      });
+      setShowPurchaseModal(true);
+      return;
+    }
+
     setSelectedReligion(religion);
     setShowPurchaseModal(true);
     setPurchaseResult(null);
@@ -288,7 +301,22 @@ export function CJSlotSystem() {
                     animate={{ scale: 1, opacity: 1 }}
                     className="text-center py-8"
                   >
-                    {purchaseResult.status === 'IMMEDIATE' ? (
+                    {purchaseResult.status === 'GENDER_RESTRICTED' ? (
+                      <>
+                        <div className="text-6xl mb-4">🚫</div>
+                        <h4 className="font-heading text-2xl font-bold text-pink-700 mb-2">
+                          Access Restricted
+                        </h4>
+                        <p className="text-pink-600 mb-4">
+                          Only women can become Chief Judges on De Peenk Courtroom.
+                        </p>
+                        <div className="bg-pink-50 rounded-2xl p-4 border border-pink-200">
+                          <p className="text-sm text-pink-700">
+                            Gentlemen are welcome as listeners and witnesses. This platform is dedicated to women's justice.
+                          </p>
+                        </div>
+                      </>
+                    ) : purchaseResult.status === 'IMMEDIATE' ? (
                       <>
                         <div className="text-6xl mb-4 animate-float">🎉</div>
                         <h4 className="font-heading text-2xl font-bold text-gradient-gold mb-2">

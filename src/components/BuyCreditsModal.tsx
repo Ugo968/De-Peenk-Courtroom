@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CREDIT_PACKAGES, type PackageType, type CreditPackage } from '../lib/economy';
+import { getPricingForUser } from '../lib/gender-pricing';
+import type { Gender } from '../lib/lawyer-slots';
 
 interface BuyCreditsModalProps {
   isOpen: boolean;
   onClose: () => void;
   userEmail?: string;
+  userGender?: Gender;
   onSuccess?: (packageType: PackageType, credits: number) => void;
 }
 
-export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com', onSuccess }: BuyCreditsModalProps) {
+export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com', userGender = 'FEMALE', onSuccess }: BuyCreditsModalProps) {
+  const pricingPackages = getPricingForUser(userGender);
+  const isMale = userGender === 'MALE';
   const [selectedPackage, setSelectedPackage] = useState<CreditPackage | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -159,15 +164,38 @@ export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com
                       <h3 className="font-heading text-lg font-bold text-pink-700 mb-4">
                         Select a Package
                       </h3>
+                      
+                      {/* Male Pricing Notice */}
+                      {isMale && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mb-4 bg-gradient-to-r from-sky-50 to-blue-50 border-2 border-sky-200 rounded-2xl p-4"
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className="text-2xl">💙</span>
+                            <div>
+                              <p className="font-heading font-bold text-sky-700 mb-1">
+                                Gentleman's Rate
+                              </p>
+                              <p className="text-sm text-sky-600">
+                                Thank you for supporting the sisterhood! Your contribution helps maintain this safe space for women. 💖
+                              </p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+
                       <div className="grid md:grid-cols-2 gap-4">
-                        {CREDIT_PACKAGES.map((pkg) => {
+                        {pricingPackages.map((pkg) => {
                           const colors = getColorClasses(pkg.color);
                           const isSelected = selectedPackage?.id === pkg.id;
+                          const displayPrice = isMale ? pkg.malePriceNaira : pkg.basePriceNaira;
 
                           return (
                             <motion.button
                               key={pkg.id}
-                              onClick={() => handleSelectPackage(pkg)}
+                              onClick={() => handleSelectPackage(pkg as any)}
                               className={`relative p-5 rounded-2xl border-2 text-left transition-all ${
                                 isSelected
                                   ? `${colors.selected} ${colors.border} ring-2 ${colors.selected.split(' ')[0]}`
@@ -214,7 +242,7 @@ export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com
                                 <div>
                                   <div className="text-xs text-pink-500">Price</div>
                                   <div className={`font-bold text-lg ${colors.text}`}>
-                                    ₦{pkg.amountNaira.toLocaleString()}
+                                    ₦{displayPrice.toLocaleString()}
                                   </div>
                                 </div>
                                 {pkg.credits > 0 && (

@@ -5,7 +5,11 @@ import type { CaseCategory, CaseStatus } from '../lib/mock-data';
 
 const categories: (CaseCategory | 'ALL')[] = ['ALL', 'RELATIONSHIPS', 'MARRIAGE', 'FAMILY', 'GIRL_SAFETY', 'EDUCATION_CAREER', 'MOTHERHOOD', 'OTHERS'];
 
-export function CasesBoard() {
+interface CasesBoardProps {
+  onViewCase?: (caseId: string) => void;
+}
+
+export function CasesBoard({ onViewCase }: CasesBoardProps) {
   const [selectedCategory, setSelectedCategory] = useState<CaseCategory | 'ALL'>('ALL');
   const [selectedStatus, setSelectedStatus] = useState<CaseStatus | 'ALL'>('ALL');
 
@@ -136,6 +140,21 @@ export function CasesBoard() {
                   <span className="text-xs text-pink-400">Presiding</span>
                 </div>
               </div>
+            )}
+
+            {/* View Case Button */}
+            {onViewCase && (
+              <motion.button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewCase(caseItem.id);
+                }}
+                className="mt-3 w-full px-4 py-2 rounded-2xl bg-gradient-to-r from-pink-100 to-sky-100 text-pink-600 font-medium text-sm border border-pink-200 hover:shadow-sm transition-all"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                💬 View Case & Gallery Talk
+              </motion.button>
             )}
           </motion.div>
         ))}

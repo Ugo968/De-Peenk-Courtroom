@@ -86,12 +86,20 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
               ⚖️ Lawyer Dashboard
             </motion.button>
             <motion.button
-              onClick={() => setCurrentPage('wallet')}
+              onClick={() => setCurrentPage('cj-dashboard')}
               className="px-8 py-4 rounded-3xl bg-gradient-to-r from-gold-400 to-gold-500 text-white font-semibold text-lg shadow-gold hover:shadow-xl transition-all"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              💰 Fund Wallet
+              👑 Chief Judge
+            </motion.button>
+            <motion.button
+              onClick={() => setCurrentPage('cases')}
+              className="px-8 py-4 rounded-3xl bg-white/80 backdrop-blur-sm border-2 border-pink-200 text-pink-600 font-semibold text-lg hover:bg-pink-50 transition-all"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              💬 View Cases
             </motion.button>
           </motion.div>
 
@@ -132,16 +140,17 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
           <h3 className="font-heading text-3xl font-bold text-center text-gradient-pink mb-8">
             ⚖️ How the Courtroom Works
           </h3>
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-5 gap-4">
             {[
               { step: '1', emoji: '🎀', title: 'File a Case', desc: 'Plaintiff submits her case (300 credits)', color: 'from-pink-100 to-pink-200' },
               { step: '2', emoji: '🔀', title: 'Smart Routing', desc: 'Relationships → CJ. Others → Lawyers', color: 'from-sky-100 to-sky-200' },
-              { step: '3', emoji: '💬', title: 'Testimonies', desc: 'Community listens and shares experiences', color: 'from-pink-100 to-sky-100' },
-              { step: '4', emoji: '⚖️', title: 'Resolution', desc: 'Lawyers or CJ deliver verdict (+400 credits)', color: 'from-gold-100 to-gold-200' },
+              { step: '3', emoji: '💬', title: 'Gallery Talk', desc: 'Listeners discuss in real-time (private)', color: 'from-pink-100 to-sky-100' },
+              { step: '4', emoji: '👑', title: 'CJ Triage', desc: 'Chief Judge handles or delegates', color: 'from-gold-100 to-gold-200' },
+              { step: '5', emoji: '⚖️', title: 'Resolution', desc: 'Final verdict delivered (+400 credits)', color: 'from-pink-100 to-pink-200' },
             ].map((item, i) => (
               <motion.div
                 key={item.step}
-                className={`bg-gradient-to-br ${item.color} rounded-3xl p-6 border border-white/50 shadow-sm relative`}
+                className={`bg-gradient-to-br ${item.color} rounded-3xl p-5 border border-white/50 shadow-sm relative`}
                 whileHover={{ scale: 1.03, y: -5 }}
                 transition={{ delay: 1.1 + i * 0.1 }}
               >
@@ -149,7 +158,7 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
                   {item.step}
                 </div>
                 <div className="text-3xl mb-3">{item.emoji}</div>
-                <h4 className="font-heading text-lg font-bold text-pink-800 mb-1">{item.title}</h4>
+                <h4 className="font-heading text-base font-bold text-pink-800 mb-1">{item.title}</h4>
                 <p className="text-pink-700/70 text-xs leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}

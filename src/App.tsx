@@ -9,15 +9,22 @@ import { Dashboard } from './components/Dashboard';
 import { WalletDashboard } from './components/WalletDashboard';
 import { FileCaseForm } from './components/FileCaseForm';
 import { LawyerDashboard } from './components/LawyerDashboard';
+import { CJTriageDashboard } from './components/CJTriageDashboard';
+import { CJPrivateChamber } from './components/CJPrivateChamber';
+import { GalleryTalk } from './components/GalleryTalk';
+import { CaseDetailView } from './components/CaseDetailView';
 import { Footer } from './components/Footer';
 import { useWallet } from './hooks/useWallet';
+import { mockCases } from './lib/mock-data';
 import type { PackageType } from './lib/economy';
 import type { CaseCategory } from './lib/mock-data';
 
-export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard';
+export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'cj-dashboard' | 'cj-chamber' | 'case-detail';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [selectedChamberCaseId, setSelectedChamberCaseId] = useState<string | null>(null);
+  const [selectedCaseId, setSelectedCaseId] = useState<string>('1'); // Default to first case for demo
   const { wallet, addCredits, spendCredits, rewardLawyerWin } = useWallet();
 
   const handleCreditsAdded = (_packageType: PackageType, credits: number) => {
@@ -25,7 +32,6 @@ export default function App() {
   };
 
   const handleFileCase = (_data: { title: string; description: string; category: CaseCategory }) => {
-    // Deduct 300 credits for filing
     const success = spendCredits(300);
     if (!success) {
       alert('Failed to deduct credits');
@@ -33,9 +39,27 @@ export default function App() {
   };
 
   const handleResolveCase = (_caseId: string, _verdict: string) => {
-    // Reward lawyer with 400 virtual credits
     rewardLawyerWin();
   };
+
+  const handleCJTriage = (caseId: string, action: 'HANDLE_MYSELF' | 'ASSIGN_TO_LAWYERS') => {
+    console.log(`CJ ${action} for case ${caseId}`);
+    // In production, this would call the API
+  };
+
+  const handleEnterChamber = (caseId: string) => {
+    setSelectedChamberCaseId(caseId);
+    setCurrentPage('cj-chamber');
+  };
+
+  const handleCJRuling = (caseId: string, _ruling: string) => {
+    console.log(`CJ ruling for case ${caseId}`);
+    rewardLawyerWin(); // CJ also gets virtual credits
+  };
+
+  const selectedChamberCase = selectedChamberCaseId 
+    ? mockCases.find(c => c.id === selectedChamberCaseId) 
+    : null;
 
   return (
     <div className="min-h-screen font-sans">
@@ -75,7 +99,14 @@ export default function App() {
           transition={{ duration: 0.3 }}
         >
           {currentPage === 'home' && <HeroSection setCurrentPage={setCurrentPage} />}
-          {currentPage === 'cases' && <CasesBoard />}
+          {currentPage === 'cases' && (
+            <CasesBoard 
+              onViewCase={(caseId) => {
+                setSelectedCaseId(caseId);
+                setCurrentPage('case-detail');
+              }} 
+            />
+          )}
           {currentPage === 'identity' && <IdentityGenerator />}
           {currentPage === 'schema' && <PrismaSchema />}
           {currentPage === 'dashboard' && <Dashboard />}
@@ -94,6 +125,27 @@ export default function App() {
               casesWon={wallet.casesWon}
               level={wallet.level}
               onResolveCase={handleResolveCase}
+            />
+          )}
+          {currentPage === 'cj-dashboard' && (
+            <CJTriageDashboard 
+              cases={mockCases}
+              onTriage={handleCJTriage}
+              onEnterChamber={handleEnterChamber}
+            />
+          )}
+          {currentPage === 'cj-chamber' && selectedChamberCase && (
+            <CJPrivateChamber 
+              caseData={selectedChamberCase}
+              onSubmitRuling={handleCJRuling}
+              onExit={() => setCurrentPage('cj-dashboard')}
+            />
+          )}
+          {currentPage === 'case-detail' && (
+            <CaseDetailView 
+              caseId={selectedCaseId}
+              userRole="LISTENER"
+              userHandle="FL-DEMO89"
             />
           )}
         </motion.main>

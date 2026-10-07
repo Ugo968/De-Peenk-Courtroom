@@ -16,7 +16,7 @@ export function Footer() {
               Your voice matters. Your identity stays protected. Built with love 💖
             </p>
             <p className="font-heading text-lg italic text-pink-400 mt-3">
-              "We Listen, We Judge."
+              "We Listen. We Judge. We Advise. We Compensate."
             </p>
           </div>
 

@@ -39,8 +39,8 @@ export function Navbar({ currentPage, setCurrentPage }: NavbarProps) {
               <h1 className="font-heading text-lg font-bold text-gradient-pink leading-tight">
                 De Peenk Courtroom
               </h1>
-              <p className="text-[10px] text-pink-400 font-medium tracking-wider uppercase">
-                We Listen, We Judge
+              <p className="text-[9px] text-pink-400 font-medium tracking-wide uppercase whitespace-nowrap">
+                We Listen. We Judge. We Advise. We Compensate.
               </p>
             </div>
           </motion.div>

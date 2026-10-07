@@ -49,7 +49,7 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
             transition={{ delay: 0.3 }}
             className="font-heading text-2xl md:text-3xl text-pink-500 italic mb-4"
           >
-            "We Listen, We Judge."
+            "We Listen. We Judge. We Advise. We Compensate."
           </motion.p>
 
           <motion.p

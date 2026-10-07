@@ -1,6 +1,6 @@
 # 🎉 De Peenk Courtroom - Complete Platform Documentation
 
-## "We Listen, We Judge." ⚖️💖
+## "We Listen. We Judge. We Advise. We Compensate." ⚖️💖
 
 A gamified, highly secure dispute resolution platform for women built with Next.js 14, TypeScript, Tailwind CSS, Prisma, PostgreSQL (Supabase), NextAuth, and Paystack.
 
@@ -632,6 +632,6 @@ Special thanks to all the women who inspired this platform.
 
 ---
 
-**"We Listen, We Judge."** ⚖️💖
+**"We Listen. We Judge. We Advise. We Compensate."** ⚖️💖
 
 *Empowering women through community-driven justice.*

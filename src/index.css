@@ -1,1 +1,114 @@
 @import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+
+  --color-pink-50: #FFF0F5;
+  --color-pink-100: #FFD1DC;
+  --color-pink-200: #FFB6C1;
+  --color-pink-300: #FF91A4;
+  --color-pink-400: #FF69B4;
+  --color-pink-500: #FF1493;
+  --color-pink-600: #C71585;
+  --color-pink-700: #A01170;
+  --color-pink-800: #8B0A5E;
+  --color-pink-900: #6B0748;
+
+  --color-sky-50: #F0FAFF;
+  --color-sky-100: #E0F6FF;
+  --color-sky-200: #B8ECFF;
+  --color-sky-300: #87CEEB;
+  --color-sky-400: #5BB8E8;
+  --color-sky-500: #00BFFF;
+  --color-sky-600: #0099CC;
+  --color-sky-700: #007399;
+
+  --color-gold-50: #FFFDF0;
+  --color-gold-100: #FFF9DB;
+  --color-gold-200: #FFF3B0;
+  --color-gold-300: #FFEC85;
+  --color-gold-400: #FFE04D;
+  --color-gold-500: #FFD700;
+  --color-gold-600: #E6C200;
+  --color-gold-700: #B39700;
+
+  --color-cream: #FFF8F0;
+  --color-blush: #FFF0F5;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(135deg, #FFF0F5 0%, #E0F6FF 50%, #FFF0F5 100%);
+  min-height: 100vh;
+}
+
+.font-heading {
+  font-family: "Playfair Display", serif;
+}
+
+.gradient-pink {
+  background: linear-gradient(135deg, #FFD1DC 0%, #FF69B4 100%);
+}
+
+.gradient-sky {
+  background: linear-gradient(135deg, #E0F6FF 0%, #87CEEB 100%);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, #FFF0F5 0%, #FFD1DC 25%, #E0F6FF 50%, #FFD1DC 75%, #FFF0F5 100%);
+}
+
+.shadow-pink {
+  box-shadow: 0 10px 40px rgba(255, 105, 180, 0.2);
+}
+
+.shadow-gold {
+  box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+}
+
+.text-gradient-pink {
+  background: linear-gradient(135deg, #FF69B4 0%, #C71585 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}

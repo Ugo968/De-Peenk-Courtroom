@@ -19,13 +19,14 @@ import { VideoAdPopup } from './components/VideoAdPopup';
 import { BrandDashboard } from './components/BrandDashboard';
 import { CJSlotSystem } from './components/CJSlotSystem';
 import { LawyerSlotSystem } from './components/LawyerSlotSystem';
+import { VideoAdRewards } from './components/VideoAdRewards';
 import { Footer } from './components/Footer';
 import { useWallet } from './hooks/useWallet';
 import { mockCases } from './lib/mock-data';
 import type { PackageType } from './lib/economy';
 import type { CaseCategory } from './lib/mock-data';
 
-export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'lawyer-slots' | 'cj-dashboard' | 'cj-chamber' | 'case-detail' | 'brand-dashboard' | 'cj-slots';
+export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard' | 'lawyer-slots' | 'video-rewards' | 'cj-dashboard' | 'cj-chamber' | 'case-detail' | 'brand-dashboard' | 'cj-slots';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -144,6 +145,13 @@ export default function App() {
               userRole={wallet.role}
               userGender="FEMALE"
               userReligion="CHRISTIAN"
+            />
+          )}
+          {currentPage === 'video-rewards' && (
+            <VideoAdRewards 
+              userRole={wallet.role}
+              currentCredits={wallet.balanceCredits}
+              onCreditsEarned={addCredits}
             />
           )}
           {currentPage === 'cj-dashboard' && (

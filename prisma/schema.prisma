@@ -1,0 +1,365 @@
+// This file is the CONSOLIDATED Prisma schema for De Peenk Courtroom
+// Copy this content to prisma/schema.prisma in your Next.js project
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ═══════════════════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════════════════
+
+enum Role {
+  LISTENER
+  LAWYER
+  CHIEF_JUDGE
+  PLAINTIFF
+}
+
+enum CaseCategory {
+  RELATIONSHIPS
+  MARRIAGE
+  FAMILY
+  GIRL_SAFETY
+  EDUCATION_CAREER
+  MOTHERHOOD
+  OTHERS
+}
+
+enum CaseStatus {
+  OPEN
+  CJ_REVIEW
+  CJ_ASSIGNED
+  CJ_HANDLING
+  DELIBERATING
+  RESOLVED
+}
+
+enum Religion {
+  MUSLIM
+  CHRISTIAN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum AdTier {
+  FLYER
+  POSTER
+  BANNER
+  BILLBOARD
+  VIDEO
+}
+
+// ═══════════════════════════════════════════════════════
+// USER MODEL (Core)
+// ═══════════════════════════════════════════════════════
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  encryptedPassword     String
+  
+  // Encrypted PII
+  encryptedFirstName    String
+  encryptedLastName     String
+  encryptedPhone        String
+  encryptedEmail        String    @unique
+  
+  // Identity & Role
+  role                  Role      @default(LISTENER)
+  anonymousHandle       String    @unique
+  
+  // NEW: Gender & Religion (Change 2, 3, 7)
+  gender                Gender?
+  religion              Religion?
+  
+  // NEW: Trial System (Change 8)
+  trialEndsAt           DateTime?
+  dailyStreak           Int       @default(0)
+  lastLoginDate         DateTime?
+  
+  // NEW: CJ Slot System (Change 2)
+  cjSlotExpiry          DateTime?
+  cjSlotReligion        String?
+  
+  // NEW: Lawyer Slot System (Change 3)
+  lawyerSlotExpiry      DateTime?
+  
+  // NEW: Star Listener Badge
+  isStarListener        Boolean   @default(false)
+  starListenerExpiry    DateTime?
+  
+  // Credits & Gamification
+  listenerCredits       Int       @default(0)
+  virtualLawyerCredits  Int       @default(0)
+  casesWon              Int       @default(0)
+  casesFiled            Int       @default(0)
+  reputationScore       Int       @default(0)
+  level                 Int       @default(1)
+  
+  // Profile
+  bio                   String?
+  avatarUrl             String?
+  isVerified            Boolean   @default(false)
+  
+  // Seat assignment (Change 6)
+  seatId                Int?
+  seatRow               Int?
+  seatPosition          Int?
+  
+  // Timestamps
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  // Relations
+  wallet                Wallet?
+  casesFiledByUser      Case[]            @relation("FiledCases")
+  casesHandled          Case[]            @relation("HandledCases")
+  testimonies           Testimony[]
+  galleryComments       GalleryComment[]
+  adVideoViews          AdVideoView[]
+  cjQueueEntries        CJQueue[]
+  lawyerWaitlistEntries LawyerWaitlist[]
+  
+  @@map("users")
+}
+
+// ═══════════════════════════════════════════════════════
+// WALLET MODEL (Phase 2)
+// ═══════════════════════════════════════════════════════
+
+model Wallet {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  balance       Decimal  @default(0) @db.Decimal(10, 2)
+  currency      String   @default("NGN")
+  paystackRef   String?
+  lastFundedAt  DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  user          User     @relation(fields: [userId], references: [id])
+  
+  @@map("wallets")
+}
+
+// ═══════════════════════════════════════════════════════
+// CASE MODEL (Phase 3)
+// ═══════════════════════════════════════════════════════
+
+model Case {
+  id              String        @id @default(cuid())
+  title           String
+  description     String
+  category        CaseCategory
+  status          CaseStatus    @default(OPEN)
+  
+  plaintiffId     String
+  judgeId         String?
+  
+  evidence        Json?
+  isAnonymous     Boolean       @default(true)
+  urgency         Int           @default(1)
+  
+  verdict         String?
+  resolvedAt      DateTime?
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  plaintiff       User          @relation("FiledCases", fields: [plaintiffId], references: [id])
+  judge           User?         @relation("HandledCases", fields: [judgeId], references: [id])
+  testimonies     Testimony[]
+  galleryComments GalleryComment[]
+  
+  @@map("cases")
+}
+
+// ═══════════════════════════════════════════════════════
+// TESTIMONY MODEL
+// ═══════════════════════════════════════════════════════
+
+model Testimony {
+  id          String   @id @default(cuid())
+  content     String
+  caseId      String
+  authorId    String
+  likes       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  case        Case     @relation(fields: [caseId], references: [id])
+  author      User     @relation(fields: [authorId], references: [id])
+  
+  @@map("testimonies")
+}
+
+// ═══════════════════════════════════════════════════════
+// GALLERY COMMENT MODEL (Phase 4)
+// ═══════════════════════════════════════════════════════
+
+model GalleryComment {
+  id          String   @id @default(cuid())
+  content     String
+  authorId    String
+  caseId      String
+  targetType  String   @default("CASE")
+  isBoosted   Boolean  @default(false)
+  boostExpiry DateTime?
+  createdAt   DateTime @default(now())
+  
+  author      User     @relation(fields: [authorId], references: [id])
+  case        Case     @relation(fields: [caseId], references: [id])
+  
+  @@map("gallery_comments")
+}
+
+// ═══════════════════════════════════════════════════════
+// AD MODEL (Phase 5)
+// ═══════════════════════════════════════════════════════
+
+model Ad {
+  id          String   @id @default(cuid())
+  brandName   String
+  tier        AdTier
+  title       String
+  content     String
+  imageUrl    String?
+  videoUrl    String?
+  linkUrl     String?
+  isActive    Boolean  @default(true)
+  startsAt    DateTime
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("ads")
+}
+
+// ═══════════════════════════════════════════════════════
+// AD VIDEO VIEW MODEL (Change 4)
+// ═══════════════════════════════════════════════════════
+
+model AdVideoView {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime @db.Date
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("ad_video_views")
+}
+
+// ═══════════════════════════════════════════════════════
+// CJ QUEUE MODEL (Change 2)
+// ═══════════════════════════════════════════════════════
+
+model CJQueue {
+  id          String    @id @default(cuid())
+  userId      String
+  religion    Religion
+  position    Int
+  joinedAt    DateTime  @default(now())
+  paidAt      DateTime?
+  activatedAt DateTime?
+  
+  user        User      @relation(fields: [userId], references: [id])
+  
+  @@index([religion, position])
+  @@index([userId, religion])
+  @@map("cj_queue")
+}
+
+// ═══════════════════════════════════════════════════════
+// LAWYER WAITLIST MODEL (Change 3)
+// ═══════════════════════════════════════════════════════
+
+model LawyerWaitlist {
+  id          String    @id @default(cuid())
+  userId      String
+  religion    Religion
+  position    Int
+  joinedAt    DateTime  @default(now())
+  paidAt      DateTime?
+  activatedAt DateTime?
+  
+  user        User      @relation(fields: [userId], references: [id])
+  
+  @@index([religion, position])
+  @@index([userId, religion])
+  @@map("lawyer_waitlist")
+}
+
+// ═══════════════════════════════════════════════════════
+// BOOSTED COMMENT MODEL (Credit Exhaustion)
+// ═══════════════════════════════════════════════════════
+
+model BoostedComment {
+  id          String   @id @default(cuid())
+  userId      String
+  commentId   String
+  caseId      String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  
+  @@index([caseId, expiresAt])
+  @@map("boosted_comments")
+}
+
+// ═══════════════════════════════════════════════════════
+// UNLOCKED CASE MODEL (Credit Exhaustion)
+// ═══════════════════════════════════════════════════════
+
+model UnlockedCase {
+  id          String   @id @default(cuid())
+  userId      String
+  caseId      String
+  unlockedAt  DateTime @default(now())
+  
+  @@unique([userId, caseId])
+  @@map("unlocked_cases")
+}
+
+// ═══════════════════════════════════════════════════════
+// POLL VOTE MODEL (Credit Exhaustion)
+// ═══════════════════════════════════════════════════════
+
+model PollVote {
+  id          String   @id @default(cuid())
+  userId      String
+  caseId      String
+  vote        String
+  createdAt   DateTime @default(now())
+  
+  @@unique([userId, caseId])
+  @@map("poll_votes")
+}
+
+// ═══════════════════════════════════════════════════════
+// VIRTUAL GIFT MODEL (Credit Exhaustion)
+// ═══════════════════════════════════════════════════════
+
+model VirtualGift {
+  id            String   @id @default(cuid())
+  senderId      String
+  recipientId   String
+  giftType      String   // rose, heart, star, crown
+  cost          Int
+  createdAt     DateTime @default(now())
+  
+  @@index([recipientId, createdAt])
+  @@map("virtual_gifts")
+}

@@ -4,15 +4,21 @@
  * Security & Anonymity Algorithm:
  * Users get ONE strict role. Real names/emails are encrypted.
  * Publicly, they use algorithmic anonymous handles.
+ * 
+ * UPDATED: Now incorporates gender and religion for handle generation
  */
 
 export type UserRole = 'LISTENER' | 'LAWYER' | 'CHIEF_JUDGE' | 'PLAINTIFF';
+export type Gender = 'MALE' | 'FEMALE';
+export type Religion = 'MUSLIM' | 'CHRISTIAN';
 
 export interface IdentityInput {
   role: UserRole;
   firstName?: string;
   lastName?: string;
   phone?: string;
+  gender?: Gender;
+  religion?: Religion;
 }
 
 /**
@@ -57,17 +63,20 @@ function shuffleString(str: string): string {
  * 2. Lawyer (LW-): `LW-` + shuffled first/last initials + 4-char random hex
  * 3. Chief Judge (CJ-): `CJ-W[CurrentWeekNumber]-[3-char random hex]`
  * 4. Plaintiff (PT-): `PT-` + shuffled initials + 4-char random hex
+ * 
+ * UPDATED: Gender prefix for male listeners (ML-) to distinguish pricing
  */
 export function generateAnonymousHandle(input: IdentityInput): string {
-  const { role, firstName = '', lastName = '', phone = '' } = input;
+  const { role, firstName = '', lastName = '', phone = '', gender } = input;
 
   switch (role) {
     case 'LISTENER': {
-      // FL- + last 2 letters of first name + first 2 letters of last name + last 2 digits of phone
+      // UPDATED: Male listeners get ML- prefix for pricing distinction
+      const prefix = gender === 'MALE' ? 'ML' : 'FL';
       const lastTwoFirst = firstName.slice(-2).toUpperCase();
       const firstTwoLast = lastName.slice(0, 2).toUpperCase();
       const lastTwoPhone = phone.slice(-2);
-      return `FL-${lastTwoFirst}${firstTwoLast}${lastTwoPhone}`;
+      return `${prefix}-${lastTwoFirst}${firstTwoLast}${lastTwoPhone}`;
     }
 
     case 'LAWYER': {
@@ -79,10 +88,11 @@ export function generateAnonymousHandle(input: IdentityInput): string {
     }
 
     case 'CHIEF_JUDGE': {
-      // CJ-W[CurrentWeekNumber]-[3-char random hex]
+      // UPDATED: Include religion in CJ handle for slot identification
       const weekNum = getCurrentWeekNumber();
       const hex = randomHex(3);
-      return `CJ-W${weekNum}-${hex}`;
+      const religionPrefix = input.religion === 'MUSLIM' ? 'M' : 'C';
+      return `CJ-${religionPrefix}W${weekNum}-${hex}`;
     }
 
     case 'PLAINTIFF': {
@@ -121,5 +131,15 @@ export function getRoleBadgeClasses(role: UserRole): string {
     case 'CHIEF_JUDGE': return 'bg-gold-100 text-gold-700 border-gold-400';
     case 'PLAINTIFF': return 'bg-pink-50 text-pink-600 border-pink-200';
     default: return 'bg-gray-100 text-gray-700';
+  }
+}
+
+/**
+ * Get religion display info
+ */
+export function getReligionInfo(religion: Religion): { emoji: string; label: string } {
+  switch (religion) {
+    case 'MUSLIM': return { emoji: '☪️', label: 'Muslim' };
+    case 'CHRISTIAN': return { emoji: '✝️', label: 'Christian' };
   }
 }

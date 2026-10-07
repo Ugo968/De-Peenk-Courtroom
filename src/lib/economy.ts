@@ -1,8 +1,14 @@
 /**
  * De Peenk Courtroom - Economy & Payment Types
+ * 
+ * COINS SYSTEM:
+ * - Coins are used for all platform transactions
+ * - File a case: 200 coins
+ * - Hire a lawyer: 500 coins
+ * - Testify/object: 200 coins
  */
 
-export type PackageType = 'LISTENER' | 'LAWYER' | 'TESTIFIER' | 'PLAINTIFF_FILING' | 'CJ_SEAT';
+export type PackageType = 'COIN_PACK_1' | 'COIN_PACK_2' | 'COIN_PACK_3' | 'CJ_SEAT';
 
 export interface CreditPackage {
   id: PackageType;
@@ -18,42 +24,33 @@ export interface CreditPackage {
 
 export const CREDIT_PACKAGES: CreditPackage[] = [
   {
-    id: 'LISTENER',
-    label: 'Listener Pack',
-    amountNaira: 1000,
-    credits: 10000,
-    emoji: '💖',
-    description: 'Perfect for active floor members who want to testify and support',
+    id: 'COIN_PACK_1',
+    label: 'Coin Pack 1',
+    amountNaira: 100,
+    credits: 200,
+    emoji: '💰',
+    description: 'Starter pack for basic platform activities',
     color: 'pink',
+  },
+  {
+    id: 'COIN_PACK_2',
+    label: 'Coin Pack 2',
+    amountNaira: 400,
+    credits: 1000,
+    emoji: '💎',
+    description: 'Better value for active users',
+    color: 'sky',
     badge: 'Popular',
   },
   {
-    id: 'LAWYER',
-    label: 'Lawyer Pack',
-    amountNaira: 2000,
-    credits: 30000,
-    emoji: '⚖️',
-    description: 'For legal advocates who want maximum influence in the courtroom',
-    color: 'sky',
+    id: 'COIN_PACK_3',
+    label: 'Coin Pack 3',
+    amountNaira: 1000,
+    credits: 3000,
+    emoji: '👑',
+    description: 'Best value for power users',
+    color: 'gold',
     badge: 'Best Value',
-  },
-  {
-    id: 'TESTIFIER',
-    label: 'Testifier Pack',
-    amountNaira: 150,
-    credits: 500,
-    emoji: '💬',
-    description: 'Used to formally testify or object in active cases',
-    color: 'pink',
-  },
-  {
-    id: 'PLAINTIFF_FILING',
-    label: 'Plaintiff Filing',
-    amountNaira: 100,
-    credits: 500,
-    emoji: '🎀',
-    description: 'Required to open a new case in the courtroom',
-    color: 'sky',
   },
   {
     id: 'CJ_SEAT',
@@ -67,6 +64,16 @@ export const CREDIT_PACKAGES: CreditPackage[] = [
     duration: '2 weeks',
   },
 ];
+
+/**
+ * Coin costs for platform actions
+ */
+export const COIN_COSTS = {
+  FILE_CASE: 200,
+  HIRE_LAWYER: 500,
+  TESTIFY: 200,
+  OBJECT: 200,
+};
 
 /**
  * Virtual Lawyer Reward Constants (Gamified, NOT real money)

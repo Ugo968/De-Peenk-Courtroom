@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CATEGORY_EMOJIS } from '../lib/mock-data';
+import { HireLawyerModal } from './HireLawyerModal';
 import type { CaseCategory } from '../lib/mock-data';
 
 interface FileCaseFormProps {
@@ -8,7 +9,7 @@ interface FileCaseFormProps {
   currentCredits: number;
 }
 
-const FILING_COST = 300;
+const FILING_COST = 200; // 200 coins to file a case
 
 const categories: { value: CaseCategory; label: string; emoji: string }[] = [
   { value: 'RELATIONSHIPS', label: 'Relationships', emoji: '💕' },
@@ -27,6 +28,7 @@ export function FileCaseForm({ onSubmit, currentCredits }: FileCaseFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [routingNote, setRoutingNote] = useState('');
+  const [showHireLawyerModal, setShowHireLawyerModal] = useState(false);
 
   const canAfford = currentCredits >= FILING_COST;
 
@@ -129,9 +131,9 @@ export function FileCaseForm({ onSubmit, currentCredits }: FileCaseFormProps) {
           <div className="flex items-center gap-3">
             <span className="text-2xl">⚠️</span>
             <div>
-              <p className="font-medium text-red-700">Insufficient Credits</p>
+              <p className="font-medium text-red-700">Insufficient Coins</p>
               <p className="text-sm text-red-600">
-                You need {FILING_COST} credits to file a case. Current balance: {currentCredits} credits
+                You need {FILING_COST} coins to file a case. Current balance: {currentCredits} coins
               </p>
             </div>
           </div>
@@ -234,7 +236,7 @@ export function FileCaseForm({ onSubmit, currentCredits }: FileCaseFormProps) {
             </div>
             <div className="text-right">
               <p className="text-2xl font-bold text-pink-600">{FILING_COST}</p>
-              <p className="text-xs text-pink-400">credits</p>
+              <p className="text-xs text-pink-400">coins</p>
             </div>
           </div>
         </div>
@@ -264,11 +266,46 @@ export function FileCaseForm({ onSubmit, currentCredits }: FileCaseFormProps) {
           )}
         </motion.button>
 
+        {/* Hire Lawyer Option */}
+        <div className="bg-sky-50 rounded-2xl p-4 border border-sky-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-sky-700">Want dedicated legal representation?</p>
+              <p className="text-xs text-sky-600 mt-1">Hire a lawyer for priority handling</p>
+            </div>
+            <motion.button
+              onClick={() => setShowHireLawyerModal(true)}
+              disabled={!title || !description || !category || currentCredits < 500}
+              className={`px-4 py-2 rounded-2xl font-semibold text-sm transition-all ${
+                title && description && category && currentCredits >= 500
+                  ? 'bg-gradient-to-r from-sky-400 to-sky-600 text-white shadow-lg hover:shadow-xl'
+                  : 'bg-sky-200 text-sky-400 cursor-not-allowed'
+              }`}
+              whileHover={title && description && category && currentCredits >= 500 ? { scale: 1.05 } : {}}
+              whileTap={title && description && category && currentCredits >= 500 ? { scale: 0.95 } : {}}
+            >
+              ⚖️ Hire Lawyer (500 coins)
+            </motion.button>
+          </div>
+        </div>
+
         {/* Privacy Notice */}
         <p className="text-center text-xs text-pink-400">
           🔒 Your identity is encrypted and protected. Only your anonymous handle will be visible.
         </p>
       </motion.form>
+
+      {/* Hire Lawyer Modal */}
+      <HireLawyerModal
+        isOpen={showHireLawyerModal}
+        onClose={() => setShowHireLawyerModal(false)}
+        caseId="new-case"
+        userCoins={currentCredits}
+        onHireLawyer={(caseId) => {
+          console.log('Lawyer hired for case:', caseId);
+          // In production, this would call the API
+        }}
+      />
     </div>
   );
 }

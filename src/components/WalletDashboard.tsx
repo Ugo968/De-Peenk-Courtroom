@@ -33,7 +33,7 @@ export function WalletDashboard({ wallet, onCreditsAdded }: WalletDashboardProps
 
         {/* Wallet Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {/* Real Credits */}
+          {/* Coins */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -41,16 +41,16 @@ export function WalletDashboard({ wallet, onCreditsAdded }: WalletDashboardProps
             className="bg-gradient-to-br from-pink-100 to-pink-200 rounded-3xl p-6 border border-pink-300 shadow-pink"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-3xl">💎</span>
+              <span className="text-3xl">💰</span>
               <span className="px-3 py-1 rounded-full bg-white/60 text-xs font-medium text-pink-600">
-                Real Credits
+                Coins
               </span>
             </div>
             <div className="font-heading text-4xl font-bold text-pink-800 mb-1">
               {wallet.balanceCredits.toLocaleString()}
             </div>
             <p className="text-sm text-pink-600/70">
-              Used for filing cases, testifying & objects
+              Used for filing cases, hiring lawyers, testifying & objects
             </p>
             <motion.button
               onClick={() => setShowModal(true)}
@@ -58,7 +58,7 @@ export function WalletDashboard({ wallet, onCreditsAdded }: WalletDashboardProps
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              💳 Buy More Credits
+              💳 Buy More Coins
             </motion.button>
           </motion.div>
 
@@ -135,15 +135,14 @@ export function WalletDashboard({ wallet, onCreditsAdded }: WalletDashboardProps
           {/* Real Money */}
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 border border-pink-100 shadow-sm">
             <h3 className="font-heading text-xl font-bold text-pink-700 mb-4 flex items-center gap-2">
-              💎 Real Credits (Paystack)
+              💰 Coin Packs (Paystack)
             </h3>
             <div className="space-y-3">
               {[
-                { emoji: '💖', label: 'Listener Pack', price: '₦1,000', credits: '10,000' },
-                { emoji: '⚖️', label: 'Lawyer Pack', price: '₦2,000', credits: '30,000' },
-                { emoji: '💬', label: 'Testifier Pack', price: '₦150', credits: '500' },
-                { emoji: '🎀', label: 'Plaintiff Filing', price: '₦100', credits: '500' },
-                { emoji: '👑', label: 'CJ Seat (2wks)', price: '₦3,500', credits: 'Access' },
+                { emoji: '💰', label: 'Coin Pack 1', price: '₦100', coins: '200' },
+                { emoji: '💎', label: 'Coin Pack 2', price: '₦400', coins: '1,000' },
+                { emoji: '👑', label: 'Coin Pack 3', price: '₦1,000', coins: '3,000' },
+                { emoji: '👑', label: 'CJ Seat (2wks)', price: '₦3,500', coins: 'Access' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center justify-between p-3 rounded-2xl bg-pink-50/50 border border-pink-100">
                   <div className="flex items-center gap-3">
@@ -152,7 +151,7 @@ export function WalletDashboard({ wallet, onCreditsAdded }: WalletDashboardProps
                   </div>
                   <div className="text-right">
                     <span className="text-sm font-bold text-pink-600">{item.price}</span>
-                    <span className="text-xs text-pink-400 ml-2">→ {item.credits}</span>
+                    <span className="text-xs text-pink-400 ml-2">→ {item.coins}</span>
                   </div>
                 </div>
               ))}

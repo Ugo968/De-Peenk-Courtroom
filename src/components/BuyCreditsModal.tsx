@@ -109,18 +109,17 @@ export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
             <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden pointer-events-auto border border-pink-100">
-              {/* Header */}
-              <div className="bg-gradient-to-r from-pink-100 via-pink-50 to-sky-100 p-6 border-b border-pink-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="font-heading text-2xl font-bold text-gradient-pink">
-                      💰 Fund Your Wallet
-                    </h2>
-                    <p className="text-sm text-pink-600/70 mt-1">
-                      Secure payment via Paystack • Naira (₦)
-                    </p>
-                  </div>
-                  <button
+      {/* Header */}
+      <div className="bg-gradient-to-r from-pink-100 via-pink-50 to-sky-100 p-6 border-b border-pink-100">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-heading text-2xl font-bold text-gradient-pink">
+              💰 Buy Coins
+            </h2>
+            <p className="text-sm text-pink-600/70 mt-1">
+              Secure payment via Paystack • Naira (₦)
+            </p>
+          </div>                  <button
                     onClick={handleClose}
                     className="p-2 rounded-full hover:bg-pink-100 transition-colors"
                   >
@@ -146,7 +145,7 @@ export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com
                     <p className="text-pink-600">
                       Your wallet has been credited with{' '}
                       <span className="font-bold text-pink-700">
-                        {selectedPackage?.credits.toLocaleString()} credits
+                        {selectedPackage?.credits.toLocaleString()} coins
                       </span>
                     </p>
                     <p className="text-sm text-pink-400 mt-4">
@@ -210,7 +209,7 @@ export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com
                                 {pkg.description}
                               </p>
 
-                              {/* Price & Credits */}
+                              {/* Price & Coins */}
                               <div className="flex items-center justify-between pt-3 border-t border-white/50">
                                 <div>
                                   <div className="text-xs text-pink-500">Price</div>
@@ -220,7 +219,7 @@ export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com
                                 </div>
                                 {pkg.credits > 0 && (
                                   <div className="text-right">
-                                    <div className="text-xs text-pink-500">Credits</div>
+                                    <div className="text-xs text-pink-500">Coins</div>
                                     <div className={`font-bold text-lg ${colors.text}`}>
                                       {pkg.credits.toLocaleString()}
                                     </div>
@@ -263,7 +262,7 @@ export function BuyCreditsModal({ isOpen, onClose, userEmail = 'user@example.com
                           </div>
                           {selectedPackage.credits > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-pink-600">Credits:</span>
+                              <span className="text-pink-600">Coins:</span>
                               <span className="font-medium text-pink-700">
                                 {selectedPackage.credits.toLocaleString()}
                               </span>

@@ -39,9 +39,9 @@ export default function App() {
   };
 
   const handleFileCase = (_data: { title: string; description: string; category: CaseCategory }) => {
-    const success = spendCredits(300);
+    const success = spendCredits(200);
     if (!success) {
-      alert('Failed to deduct credits');
+      alert('Failed to deduct coins');
     }
   };
 
@@ -77,7 +77,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1 text-pink-600">
-              💎 <span className="font-bold">{wallet.balanceCredits.toLocaleString()}</span> credits
+              💰 <span className="font-bold">{wallet.balanceCredits.toLocaleString()}</span> coins
             </span>
             <span className="flex items-center gap-1 text-sky-600">
               ⚖️ <span className="font-bold">{wallet.virtualLawyerCredits.toLocaleString()}</span> virtual

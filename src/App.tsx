@@ -7,18 +7,34 @@ import { IdentityGenerator } from './components/IdentityGenerator';
 import { PrismaSchema } from './components/PrismaSchema';
 import { Dashboard } from './components/Dashboard';
 import { WalletDashboard } from './components/WalletDashboard';
+import { FileCaseForm } from './components/FileCaseForm';
+import { LawyerDashboard } from './components/LawyerDashboard';
 import { Footer } from './components/Footer';
 import { useWallet } from './hooks/useWallet';
 import type { PackageType } from './lib/economy';
+import type { CaseCategory } from './lib/mock-data';
 
-export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet';
+export type Page = 'home' | 'cases' | 'identity' | 'schema' | 'dashboard' | 'wallet' | 'file-case' | 'lawyer-dashboard';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const { wallet, addCredits } = useWallet();
+  const { wallet, addCredits, spendCredits, rewardLawyerWin } = useWallet();
 
   const handleCreditsAdded = (_packageType: PackageType, credits: number) => {
     addCredits(credits);
+  };
+
+  const handleFileCase = (_data: { title: string; description: string; category: CaseCategory }) => {
+    // Deduct 300 credits for filing
+    const success = spendCredits(300);
+    if (!success) {
+      alert('Failed to deduct credits');
+    }
+  };
+
+  const handleResolveCase = (_caseId: string, _verdict: string) => {
+    // Reward lawyer with 400 virtual credits
+    rewardLawyerWin();
   };
 
   return (
@@ -65,6 +81,20 @@ export default function App() {
           {currentPage === 'dashboard' && <Dashboard />}
           {currentPage === 'wallet' && (
             <WalletDashboard wallet={wallet} onCreditsAdded={handleCreditsAdded} />
+          )}
+          {currentPage === 'file-case' && (
+            <FileCaseForm 
+              onSubmit={handleFileCase} 
+              currentCredits={wallet.balanceCredits} 
+            />
+          )}
+          {currentPage === 'lawyer-dashboard' && (
+            <LawyerDashboard 
+              virtualCredits={wallet.virtualLawyerCredits}
+              casesWon={wallet.casesWon}
+              level={wallet.level}
+              onResolveCase={handleResolveCase}
+            />
           )}
         </motion.main>
       </AnimatePresence>

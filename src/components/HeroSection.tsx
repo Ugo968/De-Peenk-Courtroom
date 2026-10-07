@@ -67,15 +67,23 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-wrap gap-4 justify-center items-center"
           >
             <motion.button
-              onClick={() => setCurrentPage('cases')}
+              onClick={() => setCurrentPage('file-case')}
               className="px-8 py-4 rounded-3xl bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold text-lg shadow-pink hover:shadow-xl transition-all"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              ⚖️ View Active Cases
+              🎀 File a Case
+            </motion.button>
+            <motion.button
+              onClick={() => setCurrentPage('lawyer-dashboard')}
+              className="px-8 py-4 rounded-3xl bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              ⚖️ Lawyer Dashboard
             </motion.button>
             <motion.button
               onClick={() => setCurrentPage('wallet')}
@@ -84,14 +92,6 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
               whileTap={{ scale: 0.95 }}
             >
               💰 Fund Wallet
-            </motion.button>
-            <motion.button
-              onClick={() => setCurrentPage('identity')}
-              className="px-8 py-4 rounded-3xl bg-white/80 backdrop-blur-sm border-2 border-pink-200 text-pink-600 font-semibold text-lg hover:bg-pink-50 transition-all"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              🎭 Identity Generator
             </motion.button>
           </motion.div>
 
@@ -122,12 +122,46 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
           </motion.div>
         </div>
 
-        {/* Feature Cards */}
+        {/* How It Works - Courtroom Loop */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
-          className="grid md:grid-cols-3 gap-6 mt-20 max-w-6xl mx-auto"
+          className="mt-20 max-w-6xl mx-auto"
+        >
+          <h3 className="font-heading text-3xl font-bold text-center text-gradient-pink mb-8">
+            ⚖️ How the Courtroom Works
+          </h3>
+          <div className="grid md:grid-cols-4 gap-4">
+            {[
+              { step: '1', emoji: '🎀', title: 'File a Case', desc: 'Plaintiff submits her case (300 credits)', color: 'from-pink-100 to-pink-200' },
+              { step: '2', emoji: '🔀', title: 'Smart Routing', desc: 'Relationships → CJ. Others → Lawyers', color: 'from-sky-100 to-sky-200' },
+              { step: '3', emoji: '💬', title: 'Testimonies', desc: 'Community listens and shares experiences', color: 'from-pink-100 to-sky-100' },
+              { step: '4', emoji: '⚖️', title: 'Resolution', desc: 'Lawyers or CJ deliver verdict (+400 credits)', color: 'from-gold-100 to-gold-200' },
+            ].map((item, i) => (
+              <motion.div
+                key={item.step}
+                className={`bg-gradient-to-br ${item.color} rounded-3xl p-6 border border-white/50 shadow-sm relative`}
+                whileHover={{ scale: 1.03, y: -5 }}
+                transition={{ delay: 1.1 + i * 0.1 }}
+              >
+                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center font-bold text-pink-600 text-sm">
+                  {item.step}
+                </div>
+                <div className="text-3xl mb-3">{item.emoji}</div>
+                <h4 className="font-heading text-lg font-bold text-pink-800 mb-1">{item.title}</h4>
+                <p className="text-pink-700/70 text-xs leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Feature Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3 }}
+          className="grid md:grid-cols-3 gap-6 mt-12 max-w-6xl mx-auto"
         >
           {[
             {
@@ -153,7 +187,7 @@ export function HeroSection({ setCurrentPage }: HeroSectionProps) {
               key={feature.title}
               className={`bg-gradient-to-br ${feature.gradient} rounded-3xl p-8 border border-white/50 shadow-sm`}
               whileHover={{ scale: 1.03, y: -5 }}
-              transition={{ delay: 1.1 + i * 0.1 }}
+              transition={{ delay: 1.4 + i * 0.1 }}
             >
               <div className="text-4xl mb-4">{feature.emoji}</div>
               <h3 className="font-heading text-xl font-bold text-pink-800 mb-2">{feature.title}</h3>

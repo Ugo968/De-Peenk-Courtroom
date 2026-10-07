@@ -10,6 +10,8 @@ interface NavbarProps {
 const navItems: { label: string; page: Page; emoji: string }[] = [
   { label: 'Home', page: 'home', emoji: '🏠' },
   { label: 'Cases', page: 'cases', emoji: '⚖️' },
+  { label: 'File Case', page: 'file-case', emoji: '🎀' },
+  { label: 'Lawyer', page: 'lawyer-dashboard', emoji: '⚖️' },
   { label: 'Identity', page: 'identity', emoji: '🎭' },
   { label: 'Wallet', page: 'wallet', emoji: '💰' },
   { label: 'Schema', page: 'schema', emoji: '🗄️' },
